@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const baseURL = "https://basic-auth-example.herokuapp.com";
+
 const fetchPostStart = {
 	type: "post/fetch-start",
 };
@@ -18,7 +20,7 @@ const fetchPostAsync = () => {
 	return function (dispatch, getState) {
 		dispatch(fetchPostStart);
 		axios
-			.get("https://jsonplaceholder.typicode.com/posts")
+			.get(`${baseURL}/users`)
 			.then((response) => {
 				// console.log(response);
 				dispatch(fetchPostSuccess(response.data));
