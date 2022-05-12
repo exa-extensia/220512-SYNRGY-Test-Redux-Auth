@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loginActionAsync } from "../redux/actions";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(loginActionAsync()); // redux thunk middleware
+	}, [dispatch]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();

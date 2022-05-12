@@ -1,35 +1,58 @@
 import axios from "axios";
 
-const baseURL = "https://basic-auth-example.herokuapp.com";
+const loginActionStart = () => ({});
 
-const fetchPostStart = {
-	type: "post/fetch-start",
-};
-
-const fetchPostSuccess = (payload) => ({
-	type: "post/fetch-success",
+const loginActionSuccess = (payload) => ({
+	type: "login/success",
 	payload,
 });
 
-const fetchPostFailed = (payload) => ({
-	type: "post/fetch-failed",
-	payload,
-});
+const loginActionFailed = () => {};
 
-const fetchPostAsync = () => {
-	return function (dispatch, getState) {
-		dispatch(fetchPostStart);
+const loginActionAsync = (username, password) => {
+	return (dispatch, getState, baseURL) => {
+		// dispatch(loginActionStart);
 		axios
-			.get(`${baseURL}/users`)
+			.post(`${baseURL}/users/authenticate`, {
+				username,
+				password,
+			})
 			.then((response) => {
-				// console.log(response);
-				dispatch(fetchPostSuccess(response.data));
+				console.log(response);
+				dispatch(loginActionSuccess({ username, password }));
 			})
 			.catch((error) => {
 				// handle error di sini
-				dispatch(fetchPostFailed(error));
+				dispatch(loginActionFailed(error));
 			});
 	};
 };
 
-export { fetchPostAsync };
+const fetchUserDetailAsync = () => {
+	return (dispatch, getState, baseURL) => {
+		const { username, password } = getState();
+		console.log(username, password);
+		axios
+			.get(`${baseURL}/users/`, {
+				auth: {
+					username,
+					password,
+				},
+				headers: {
+					// Authorization using token : `Bearer ${token}`
+				},
+			})
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {});
+	};
+};
+
+export {
+	loginActionAsync,
+	loginActionFailed,
+	loginActionStart,
+	loginActionSuccess,
+	fetchUserDetailAsync,
+};
