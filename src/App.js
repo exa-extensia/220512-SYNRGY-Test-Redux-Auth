@@ -1,6 +1,7 @@
 import { Link, Routes, Route } from "react-router-dom";
 import PageLogin from "./components/PageLogin";
 import PageUserDetail from "./components/PageUserDetail";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 	return (
@@ -17,7 +18,9 @@ function App() {
 			</nav>
 			<Routes>
 				<Route index element={<PageLogin />} />
-				<Route path="/user-detail" element={<PageUserDetail />} />
+				<Route element={<ProtectedRoute />}>
+					<Route path="/user-detail" element={<PageUserDetail />} />
+				</Route>
 			</Routes>
 		</div>
 	);
